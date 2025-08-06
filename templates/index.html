@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% include 'header.html' %}
+{% block title %}Главная страница{% endblock %}
+{% block content %}
+    <div class="container">
+        <h1>Наши товары</h1>
+        {% for product in products | batch(3) %}
+            <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+            {% for item in product %}
+                <div class="col">
+                    <div class="card mb-4 rounded-3 shadow-sm">
+                        <div class="card-header py-3">
+                            <h4 class="my-0 fw-normal">
+                                <a href="/product/{{item.id}}"> {{ item.name }} </a>
+                            </h4>
+                        </div>
+                        <form action="{{ url_for('add_to_cart',product_id=item.id) }}" method="POST">
+                            <div class="card-body">
+                                <h4 class="card-title pricing-card-title">{{ item.price }}<small class="text-body-secondary fw-light">руб.</small></h4>
+                                <h4>{{ item.desc }}</h4>
+                                <button type="submit" class="w-100 btn btn-lg btn-outline-primary">В корзину</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
