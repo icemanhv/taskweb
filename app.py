@@ -48,7 +48,6 @@ def product(product_id):
     reviews = db.session.query(Review).options(joinedload(Review.user)).filter(Review.id_product == product_id).all()
     return render_template('product.html', product=prod, reviews=reviews)
 
-
 # Корзина
 @app.route('/cart')
 def cart():
