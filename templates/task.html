@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% include 'header.html' %}
+{% block title %}Главная страница{% endblock %}
+{% block content %}
+    <div class="container">
+        {% if current_user.is_authenticated %}
+        <h2>Описание товара</h2>
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('update_task', task_id=task.id) }}">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope=col"">Параметры продукта</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Название</td>
+                            <td> <input name="name" type="text" value="{{ task.name }}"/> </td>
+                        </tr>
+                        <tr>
+                            <td>Описание</td>
+                            <td><input name="desc" type="text" value="{{ task.desc }}"/></td>
+                        </tr>
+                        <tr>
+                            <td>Дата создания</td>
+                            <td><input name="created_at" type="datetime-local" value="{{ task.created_at.strftime('%Y-%m-%dT%H:%M') }}"/></td>
+                        </tr>
+                        <tr>
+                            <td>Дата окончания</td>
+                            <td><input name="end_date" type="datetime-local" value="{{ task.end_date.strftime('%Y-%m-%dT%H:%M') }}"/></td>
+                        </tr>
+                    </tbody>
+
+                </table>
+                <button type="submit">Обновить</button>
+            </form>
+        </div>
+        {% endif %}
+
+    </div>
+{% endblock %}

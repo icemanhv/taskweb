@@ -2,29 +2,41 @@
 {% include 'header.html' %}
 {% block title %}Главная страница{% endblock %}
 {% block content %}
+    {%if current_user.is_authenticated %}
     <div class="container">
-        <h1>Наши товары</h1>
-        {% for product in products | batch(3) %}
-            <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
-            {% for item in product %}
-                <div class="col">
-                    <div class="card mb-4 rounded-3 shadow-sm">
-                        <div class="card-header py-3">
-                            <h4 class="my-0 fw-normal">
-                                <a href="/product/{{item.id}}"> {{ item.name }} </a>
-                            </h4>
-                        </div>
-                        <form action="{{ url_for('add_to_cart',product_id=item.id) }}" method="POST">
-                            <div class="card-body">
-                                <h4 class="card-title pricing-card-title">{{ item.price }}<small class="text-body-secondary fw-light">руб.</small></h4>
-                                <h4>{{ item.desc }}</h4>
-                                <button type="submit" class="w-100 btn btn-lg btn-outline-primary">В корзину</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            {% endfor %}
-            </div>
-        {% endfor %}
+        <h1>Список задач</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Описание</th>
+                    <th>Дата создания</th>
+                    <th>Дата окончания</th>
+                    <th>Действие</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
+                    <tr>
+                        <td><a href="/task/{{task.id}}">{{ task.name }}</a></td>
+                        <td>{{ task.desc }}</td>
+                        <td>{{ task.created_at.strftime('%d.%m.%Y %H:%M') }}
+                        <td>{{ task.end_date.strftime('%d.%m.%Y %H:%M') }}</td>
+                        <td><a href="/remove_task/{{task.id}}">Удалить</a></td>
+                    </tr>
+                {% endfor %}
+                <form method="POST" action="{{ url_for('add_task') }}">
+                    <tr>
+                        <td><input type="text" name="name" value="Новая задача"/></td>
+                        <td><input type="text" name="desc" value="Описание задачи"/></td>
+                        <td><input type="datetime-local" name="created_at" value="{{ start.strftime('%Y-%m-%dT%H:%M') }}"/></td>
+                        <td><input type="datetime-local" name="end_date" value="{{ end.strftime('%Y-%m-%dT%H:%M') }}"/></td>
+                        <td><button type="submit">Добавить</button></td>
+                    </tr>
+                </form>
+            </tbody>
+        </table>
+
     </div>
+    {% endif %}
 {% endblock %}
